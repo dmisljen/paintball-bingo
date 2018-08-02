@@ -14,3 +14,11 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+/**
+ * API Match Controllers
+ * All route names are prefixed with 'match'.
+ */
+Route::group(['namespace' => 'Match', 'prefix' => 'match', 'as' => 'match.'], function () {
+    Route::get('/list', 'MatchController@match_list')->name('list');
+});
