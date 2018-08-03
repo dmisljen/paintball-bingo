@@ -21,4 +21,5 @@ Route::get('/', function () {
  */
 Route::group(['namespace' => 'Match', 'prefix' => 'match', 'as' => 'match.'], function () {
     Route::get('/list', 'MatchController@match_list')->name('list');
+    Route::get('/enter/{match_id}', 'MatchController@enter_match')->name('enter');
 });
