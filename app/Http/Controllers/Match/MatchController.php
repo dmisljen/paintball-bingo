@@ -94,4 +94,22 @@ class MatchController extends Controller
 
         return array("success" => false, "message" => "An error occured while trying to create a bingo card, please try again or contact one of our administrators.");
     }
+
+    /**
+     * Return a list of all previous bingo events (Paintball matches)
+     * 
+     * @return json $matches
+     */
+    public function match_history()
+    {
+        $matches = DB::table("bingo_match")
+            ->join("bingo_match_prize", "bingo_match_prize.match_id", "=", "bingo_match.id")
+            ->join("bingo_prize", "bingo_prize.id", "=", "bingo_match_prize.prize_id")
+            ->select("bingo_match.id", "bingo_match.name", "bingo_match_prize.winner_id", "bingo_prize.name as main_prize")
+            ->where("bingo_match.start_at", "<", date("Y-m-d H:i:s"))
+            ->where("bingo_match_prize.prize_order", 1)
+            ->get();
+
+        return $matches;
+    }
 }
