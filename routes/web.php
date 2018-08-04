@@ -23,3 +23,11 @@ Route::group(['namespace' => 'Match', 'prefix' => 'match', 'as' => 'match.'], fu
     Route::get('/list', 'MatchController@match_list')->name('list');
     Route::get('/enter/{match_id}', 'MatchController@enter_match')->name('enter');
 });
+
+/**
+ * API Card Controllers
+ * All route names are prefixed with 'card'.
+ */
+Route::group(['namespace' => 'Card', 'prefix' => 'card', 'as' => 'card.'], function () {
+    Route::get('/{card_id}/tick_event/{event_id}', 'CardController@tick_event')->name('tick_event');
+});
