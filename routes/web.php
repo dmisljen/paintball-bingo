@@ -30,4 +30,5 @@ Route::group(['namespace' => 'Match', 'prefix' => 'match', 'as' => 'match.'], fu
  */
 Route::group(['namespace' => 'Card', 'prefix' => 'card', 'as' => 'card.'], function () {
     Route::get('/{card_id}/tick_event/{event_id}', 'CardController@tick_event')->name('tick_event');
+    Route::get('/{card_id}/claim_bingo', 'CardController@claim_bingo')->name('claim_bingo');
 });
