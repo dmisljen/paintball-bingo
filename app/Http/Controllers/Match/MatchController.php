@@ -38,7 +38,7 @@ class MatchController extends Controller
             ->join("bingo_match_prize", "bingo_match_prize.match_id", "=", "bingo_match.id")
             ->join("bingo_prize", "bingo_prize.id", "=", "bingo_match_prize.prize_id")
             ->select("bingo_match.id", "bingo_match.name", "bingo_match.start_at as start_time", "bingo_prize.name as main_prize")
-            ->where("bingo_match.start_at", ">", time())
+            ->where("bingo_match.start_at", ">", date("Y-m-d H:i:s"))
             ->where("bingo_match_prize.prize_order", 1)
             ->get();
 
@@ -62,7 +62,7 @@ class MatchController extends Controller
         $valid_match = DB::table("bingo_match")
             ->select("id")
             ->where("id", $match_id)
-            ->where("start_at", ">", time())
+            ->where("start_at", ">", date("Y-m-d H:i:s"))
             ->first();
 
         if ( isset($valid_match->id) ) {

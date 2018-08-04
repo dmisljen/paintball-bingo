@@ -38,8 +38,8 @@ class CardController extends Controller
     public function tick_event($card_id, $event_id)
     {
         // High-quality "validation" of inputs
-        $card_id = (int) $card_id;
-        $event_id = (int) $event_id;
+        $card_id = $this->validate_int($card_id);
+        $event_id = $this->validate_int($event_id);
 
         // Get card and check if it's valid
         $valid_card = DB::table("bingo_card")
@@ -64,20 +64,46 @@ class CardController extends Controller
                 $card_events_index = array_flip($card_events->toArray());
 
                 if (isset($match_events_index[$event_id]) && isset($card_events_index[$event_id])) {
+                    // Possible TODO: check if event is already hit
                     DB::table("bingo_card_event")
                         ->where("bingo_card_id", $valid_card->id)
                         ->where("bingo_event_id", $event_id)
-                        ->update(["hit_at" => time(), "hit_match_event_id" => $match_events_index[$event_id]]);
+                        ->update(["hit_at" => date("Y-m-d H:i:s"), "hit_match_event_id" => $match_events_index[$event_id]]);
 
                     return array("success" => true, "message" => "Event ticked!");
                 } else {
                     return array("success" => false, "message" => "The specified event wasn't found!");
                 }
             } else {
-                return array("success" => false, "message" => "The specified event wasn't found!");
+                return array("success" => false, "message" => "Match or card events not found!");
             }
         } else {
             return array("success" => false, "message" => "Please check your data, the specified bingo card was not found!");
         }
+    }
+
+    /**
+     * Claim bingo on a card
+     * 
+     * @param integer card_id
+     * 
+     * @return json $response
+     */
+    public function claim_bingo($card_id)
+    {
+        // High-quality "validation" of inputs
+        $card_id = (int) $card_id;
+    }
+
+    /**
+     * Validate integer input
+     * 
+     * @param mixed input
+     * 
+     * @return integer $validated_input
+     */
+    private function validate_int($input) {
+        // Wow, much sanitation, such validated, very security!
+        return (int) $input;
     }
 }
