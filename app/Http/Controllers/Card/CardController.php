@@ -170,6 +170,8 @@ class CardController extends Controller
                 }
 
                 return array("success" => true, "message" => "Congratulations! You have won $prize_number. prize in PAINTBALL BINGO!");
+            } else {
+                return array("success" => false, "message" => "Sorry, you don't have bingo with that card!");
             }
         } else {
             return array("success" => false, "message" => "Please check your data, the specified bingo card was not found!");

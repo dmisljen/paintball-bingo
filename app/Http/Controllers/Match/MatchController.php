@@ -95,6 +95,43 @@ class MatchController extends Controller
         return array("success" => false, "message" => "An error occured while trying to create a bingo card, please try again or contact one of our administrators.");
     }
 
+        /**
+     * Insert an event for a match
+     * 
+     * @param integer match_id
+     * @param integer event_id
+     * 
+     * @return json $response
+     */
+    public function new_event($match_id, $event_id)
+    {
+        // High-quality "validation" of inputs
+        $match_id = $this->validate_int($match_id);
+        $event_id = $this->validate_int($event_id);
+
+        // Get card and check if it's valid
+        $valid_match = DB::table("bingo_match")
+            ->where("id", $match_id)
+            ->where("start_at", ">", date("Y-m-d H:i:s"))
+            ->first();
+
+        if ($valid_match) {
+            $event_data = array(
+                "match_id" => $match_id,
+                "bingo_event_id" => $event_id
+            );
+            $match_event_id = DB::table("bingo_match_event")->insertGetId( $event_data );
+
+            if ($match_event_id) {
+                return array("success" => true, "message" => "Event recorded!");
+            } else {
+                return array("success" => false, "message" => "An error occured while saving!");
+            }
+        } else {
+            return array("success" => false, "message" => "Please check your data, the specified match was not found or has not yet started!");
+        }
+    }
+
     /**
      * Return a list of all previous bingo events (Paintball matches)
      * 
@@ -111,5 +148,17 @@ class MatchController extends Controller
             ->get();
 
         return $matches;
+    }
+
+    /**
+     * Validate integer input
+     * 
+     * @param mixed input
+     * 
+     * @return integer $validated_input
+     */
+    private function validate_int($input) {
+        // Wow, much sanitation, such validated, very security!
+        return (int) $input;
     }
 }

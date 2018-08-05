@@ -23,6 +23,7 @@ Route::group(['namespace' => 'Match', 'prefix' => 'match', 'as' => 'match.'], fu
     Route::get('/list', 'MatchController@match_list')->name('list');
     Route::get('/enter/{match_id}', 'MatchController@enter_match')->name('enter');
     Route::get('/history', 'MatchController@match_history')->name('history');
+    Route::get('/{match_id}/new_event/{event_id}', 'MatchController@new_event')->name('new_event');
 });
 
 /**
